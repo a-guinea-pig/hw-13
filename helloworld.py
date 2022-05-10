@@ -1,14 +1,10 @@
 
 
 import streamlit as st
-from streamlit_folium import folium_static
 import folium
 import pandas as pd
 
 with st.echo(code_location='below'):
-
-
-
 
     def print_hello(name = "World"):
         st.write(f"## Hello, {name}!")
