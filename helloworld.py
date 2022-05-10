@@ -25,8 +25,8 @@ with st.echo(code_location='below'):
 
     dataset
     
-    dataset.groupby(['country']).sum().plot(
-    kind='pie', y='lines', autopct='%1.0f%%')
+    st.image(dataset.groupby(['country']).sum().plot(
+    kind='pie', y='lines', autopct='%1.0f%%'))
     
     
 
