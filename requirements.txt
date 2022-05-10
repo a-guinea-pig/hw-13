@@ -5,3 +5,4 @@ streamlit>=1.2.0
 folium>=0.11
 jinja2
 branca
+matplotlib
