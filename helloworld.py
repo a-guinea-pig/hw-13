@@ -21,6 +21,6 @@ with st.echo(code_location='below'):
 
     dataset
 
-    m = folium.Map(location=[0,0])
+    #m = folium.Map(location=[0,0])
 
-    m
+    #m
