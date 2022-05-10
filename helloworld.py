@@ -1,10 +1,7 @@
-$ pip install folium
+
 
 import streamlit as st
-import requests # library to handle requests
-import folium # map rendering library
-import streamlit as st #creating an app
-from streamlit_folium import folium_static 
+
 import pandas as pd
 
 with st.echo(code_location='below'):
@@ -24,8 +21,4 @@ with st.echo(code_location='below'):
 
     dataset
 
-    #from https://python-graph-gallery.com/313-bubble-map-with-folium
 
-    m = folium.Map(location=[0,0])
-
-    m
