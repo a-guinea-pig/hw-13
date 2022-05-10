@@ -30,10 +30,10 @@ with st.echo(code_location='below'):
     df1 = df.groupby(['region']).sum()
     df2 = df1.sort_values(by=["systems"], ascending=True)
     plot = df2.plot.pie(y='systems', figsize=(10, 10), wedgeprops = { 'linewidth' : 3, 'edgecolor' : 'white' }, colors=colorss)
-    #st.pyplot(fig=plot, clear_figure=None, **kwargs)
+    st.pyplot(plot)
     
     
 
-    m = folium.Map(location=[0,0])
+    #m = folium.Map(location=[0,0])
 
-    st.map(m)
+    
