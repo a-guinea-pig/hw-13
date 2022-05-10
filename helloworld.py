@@ -1,7 +1,10 @@
 
 
 import streamlit as st
-import folium
+import requests # library to handle requests
+import folium # map rendering library
+import streamlit as st #creating an app
+from streamlit_folium import folium_static 
 import pandas as pd
 
 with st.echo(code_location='below'):
