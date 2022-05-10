@@ -1,15 +1,10 @@
 import streamlit as st
+import folium
 import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-import altair as alt
 
 with st.echo(code_location='below'):
 
-    import streamlit as st
-    import folium
-    import pandas as pd
+
 
 
     def print_hello(name = "World"):
