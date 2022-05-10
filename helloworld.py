@@ -2,9 +2,11 @@
 
 import streamlit as st
 
-import folium # map rendering library
+import folium 
 
 import pandas as pd
+
+import matplotlib.pyplot as plt
 
 with st.echo(code_location='below'):
 
@@ -22,6 +24,11 @@ with st.echo(code_location='below'):
     dataset = get_dataset()
 
     dataset
+    
+    dataset.groupby(['country']).sum().plot(
+    kind='pie', y='lines', autopct='%1.0f%%')
+    
+    
 
    # m = folium.Map(location=[0,0])
 
