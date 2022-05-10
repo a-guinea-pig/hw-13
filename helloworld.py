@@ -30,7 +30,7 @@ with st.echo(code_location='below'):
     df1 = df.groupby(['region']).sum()
     df2 = df1.sort_values(by=["systems"], ascending=True)
     plot = df2.plot.pie(y='systems', figsize=(10, 10), wedgeprops = { 'linewidth' : 3, 'edgecolor' : 'white' }, colors=colorss)
-    st.image(plot, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+    st.pyplot(fig=plot, clear_figure=None, **kwargs)
     
     
 
