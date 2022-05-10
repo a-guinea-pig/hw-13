@@ -8,6 +8,8 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 
+from matplotlib.figure import Figure
+
 with st.echo(code_location='below'):
 
     def print_hello(name = "World"):
@@ -29,10 +31,14 @@ with st.echo(code_location='below'):
     df = dataset[["systems", "region"]]
     df1 = df.groupby(['region']).sum()
     df2 = df1.sort_values(by=["systems"], ascending=True)
-    plot = df2.plot.pie(y='systems', figsize=(10, 10), wedgeprops = { 'linewidth' : 3, 'edgecolor' : 'white' }, colors=colorss)
-    st.pyplot(plot)
-    
-    
+    #plot = df2.plot.pie(y='systems', figsize=(10, 10), wedgeprops = { 'linewidth' : 3, 'edgecolor' : 'white' }, colors=colorss)
+    #st.pyplot(plot)
+
+    fig1, ax1 = plt.subplots()
+    ax1.pie("systems", explode=explode, labels="region", autopct='%1.1f%%', startangle=90)
+    ax1.axis('equal')
+
+    st.pyplot(fig1)
 
     #m = folium.Map(location=[0,0])
 
