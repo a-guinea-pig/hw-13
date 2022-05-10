@@ -1,7 +1,7 @@
 !pip install folium
 
 import streamlit as st
-#import folium
+import folium
 import pandas as pd
 
 with st.echo(code_location='below'):
@@ -21,3 +21,6 @@ with st.echo(code_location='below'):
 
     dataset
 
+    m = folium.Map(location=[0,0])
+
+    m
