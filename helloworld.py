@@ -1,4 +1,4 @@
-
+$ pip install folium
 
 import streamlit as st
 import requests # library to handle requests
