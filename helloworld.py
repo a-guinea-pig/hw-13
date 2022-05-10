@@ -1,9 +1,9 @@
 
 
 import streamlit as st
-import requests # library to handle requests
+
 import folium # map rendering library
-from streamlit_folium import folium_static 
+
 import pandas as pd
 
 with st.echo(code_location='below'):
@@ -23,6 +23,6 @@ with st.echo(code_location='below'):
 
     dataset
 
-    m = folium.Map(location=[0,0])
+   # m = folium.Map(location=[0,0])
 
-    m
+   # m
