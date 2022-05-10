@@ -35,7 +35,7 @@ with st.echo(code_location='below'):
     #st.pyplot(plot)
 
     fig1, ax1 = plt.subplots()
-    ax1.pie("systems", explode=explode, labels="region", autopct='%1.1f%%', startangle=90)
+    ax1.pie("systems", labels="region")
     ax1.axis('equal')
 
     st.pyplot(fig1)
