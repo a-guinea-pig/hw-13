@@ -77,7 +77,7 @@ with st.echo(code_location='below'):
                 "asia",
                 "australia",
                 "europe",
-                "latin america"
+                "latin america",
                 "north america"
             ]
         )
