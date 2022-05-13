@@ -74,7 +74,11 @@ with st.echo(code_location='below'):
             "select a region",
             [
                 "africa",
-                "asia"
+                "asia",
+                "australia",
+                "europe",
+                "latin america"
+                "north america"
             ]
         )
 
