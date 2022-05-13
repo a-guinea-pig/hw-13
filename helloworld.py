@@ -1,14 +1,10 @@
-
-
 import streamlit as st
-
-import folium 
 
 import pandas as pd
 
 import matplotlib.pyplot as plt
 
-from matplotlib.figure import Figure
+import seaborn as sns
 
 with st.echo(code_location='below'):
 
