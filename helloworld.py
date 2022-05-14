@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 
 import seaborn as sns
 
+from streamlit_folium import folium_static
+import folium
+
 with st.echo(code_location='below'):
 
     @st.cache
@@ -201,3 +204,15 @@ with st.echo(code_location='below'):
         st.pyplot(fig)
 
     choose_region_inauguration()
+    
+    m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+
+    # add marker for Liberty Bell
+tooltip = "Liberty Bell"
+folium.Marker(
+    [39.949610, -75.150282], popup="Liberty Bell", tooltip=tooltip
+).add_to(m)
+
+    # call to render Folium map in Streamlit
+folium_static(m)
+
