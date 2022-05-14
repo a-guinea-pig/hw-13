@@ -32,6 +32,14 @@ with st.echo(code_location='below'):
     dataset_total_europe = dataset_total.loc[dataset_total['region'] == 'europe']  # A98743
     dataset_total_latin_america = dataset_total.loc[dataset_total['region'] == 'latin_america']  # F7C548
     dataset_total_north_america = dataset_total.loc[dataset_total['region'] == 'north_america']  # E54B4B
+    
+    
+    dataset_cities_africa = dataset_cities.loc[dataset_cities['region'] == 'africa']  # 437C90
+    dataset_cities_asia = dataset_cities.loc[dataset_cities['region'] == 'asia']  # 255957
+    dataset_cities_australia = dataset_cities.loc[dataset_cities['region'] == 'australia']  # EDAFB8
+    dataset_cities_europe = dataset_cities.loc[dataset_cities['region'] == 'europe']  # A98743
+    dataset_cities_latin_america = dataset_cities.loc[dataset_cities['region'] == 'latin_america']  # F7C548
+    dataset_cities_north_america = dataset_cities.loc[dataset_cities['region'] == 'north_america']  # E54B4B
 
     # для посмотреть
 
