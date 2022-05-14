@@ -2,3 +2,4 @@ seaborn
 matplotlib
 folium
 streamlit_folium
+celluloid
