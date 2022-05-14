@@ -144,7 +144,7 @@ with st.echo(code_location='below'):
         decades_x = list_of_decades()
         constructed_by_decades_total = count_inaugurated_in_decades(dataset_total)
 
-        axes_constructed_total = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_total}
+        axes_constructed_total = {'decade': decades_x, 'countries that inaugurated their first metro system': constructed_by_decades_total}
         construction_data_total = pd.DataFrame(axes_constructed_total, columns=['decade', 'metro systems inaugurated'])
 
         fig_constructed_total = plt.figure(figsize=(14, 10))
@@ -159,7 +159,7 @@ with st.echo(code_location='below'):
         st.pyplot(fig_constructed_total)
 
     with col2:
-        st.header("Metro inauguration by cities")
+        st.header(" ")
 
         st.write("It is visible that in Asia and Latin America metro systems were inaugurated later than in Europe.")
 
@@ -288,7 +288,7 @@ with st.echo(code_location='below'):
         st.header("How many metro systems were built, by decades")
 
         st.write("The following histogram shows the number of metro systems built (by cities in contrast to by countries"
-                 "in the previous graphs. The dominance of Asian cities in the past years metro construction is seen clearly.")
+                 "in the previous graphs). The dominance of Asian cities in the past years metro construction is seen clearly.")
 
         fig = plt.figure(figsize=(12, 6))
         sns.histplot(data=dataset_cities, x="year", hue="region",
