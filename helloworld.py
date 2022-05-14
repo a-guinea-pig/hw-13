@@ -1,22 +1,21 @@
+import streamlit as st
+
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+import requests
+
+### FROM: https://discuss.streamlit.io/t/ann-streamlit-folium-a-component-for-rendering-folium-maps/4367
+from streamlit_folium import folium_static
+import folium
+### END FROM
+
+
 with st.echo(code_location='below'):
-    import streamlit as st
-
-    import pandas as pd
-
-    import matplotlib.pyplot as plt
-
-    import seaborn as sns
-
-    import requests
-
-    ### FROM: https://discuss.streamlit.io/t/ann-streamlit-folium-a-component-for-rendering-folium-maps/4367
-    from streamlit_folium import folium_static
-    import folium
-
-
-    ### END FROM
-
-
+    
     @st.cache
     def get_dataset(link):
         dataset_link = link
