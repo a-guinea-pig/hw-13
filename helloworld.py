@@ -1,39 +1,109 @@
-import streamlit as st
-
-import pandas as pd
-
-import matplotlib.pyplot as plt
-
-import seaborn as sns
-
-from streamlit_folium import folium_static
-import folium
-
 with st.echo(code_location='below'):
+    import streamlit as st
+
+    import pandas as pd
+
+    import matplotlib.pyplot as plt
+
+    import seaborn as sns
+
+    import requests
+
+    ### FROM: https://discuss.streamlit.io/t/ann-streamlit-folium-a-component-for-rendering-folium-maps/4367
+    from streamlit_folium import folium_static
+    import folium
+
+
+    ### END FROM
+
 
     @st.cache
     def get_dataset(link):
         dataset_link = link
         return pd.read_csv(dataset_link)
 
-    dataset_total = get_dataset("metro_countries_total.csv")
-    dataset_cities = get_dataset("metro_countries_cities.csv")
 
-    dataset_total_africa = dataset_total.loc[dataset_total['region'] == 'africa'] # 437C90
-    dataset_total_asia = dataset_total.loc[dataset_total['region'] == 'asia'] # 255957
-    dataset_total_australia = dataset_total.loc[dataset_total['region'] == 'australia'] # EDAFB8
-    dataset_total_europe = dataset_total.loc[dataset_total['region'] == 'europe'] # A98743
-    dataset_total_latin_america = dataset_total.loc[dataset_total['region'] == 'latin_america'] # F7C548
-    dataset_total_north_america = dataset_total.loc[dataset_total['region'] == 'north_america'] # E54B4B
+    dataset_total = get_dataset("archive/metro_countries_total.csv")
+    dataset_cities = get_dataset("archive/metro_countries_cities.csv")
+
+    dataset_total_africa = dataset_total.loc[dataset_total['region'] == 'africa']  # 437C90
+    dataset_total_asia = dataset_total.loc[dataset_total['region'] == 'asia']  # 255957
+    dataset_total_australia = dataset_total.loc[dataset_total['region'] == 'australia']  # EDAFB8
+    dataset_total_europe = dataset_total.loc[dataset_total['region'] == 'europe']  # A98743
+    dataset_total_latin_america = dataset_total.loc[dataset_total['region'] == 'latin_america']  # F7C548
+    dataset_total_north_america = dataset_total.loc[dataset_total['region'] == 'north_america']  # E54B4B
+
+    # для посмотреть
 
     dataset_total
     dataset_cities
 
-    df = dataset_total[["inauguration", "region"]]
+    list_of_cities = dataset_cities['city'].tolist()
 
-    df
+    # changes in database cities' names to find latitude and longitude of the cities properly
+    list_of_cities[192] = "San Francisco"  # initial "San Francisco/Oakland"
+    list_of_cities[95] = "Delhi"  # initial "Noida", new satellite city of Delhi
 
-    #распределение появления метро в странах по регионам
+
+    # adding latitude and longitude of the cities for the map
+
+
+    @st.cache
+    def find_lat(c):
+        entrypoint = "https://nominatim.openstreetmap.org/search"
+        params1 = {'city': c,
+                   "limit": 1,
+                   'format': 'json'}
+        r1 = requests.get(entrypoint, params=params1)
+        data1 = r1.json()
+        for item in data1:
+            latitude1 = (float(item["lat"]))
+        return latitude1
+
+
+    list_of_la = []
+
+    for i in list_of_cities:
+        list_of_la.append(find_lat(i))
+
+
+    @st.cache
+    def find_lon(c):
+        entrypoint = "https://nominatim.openstreetmap.org/search"
+        params2 = {'city': c,
+                   "limit": 1,
+                   'format': 'json'}
+        r2 = requests.get(entrypoint, params=params2)
+        data2 = r2.json()
+        for item in data2:
+            longitude1 = (float(item["lon"]))
+        return longitude1
+
+
+    list_of_lo = []
+
+    for i in list_of_cities:
+        list_of_lo.append(find_lon(i))
+
+    st.write(list_of_lo)
+
+    dataset_cities_with_la_lo = dataset_cities.copy()
+
+    dataset_cities_with_la_lo["la"] = list_of_la
+    dataset_cities_with_la_lo["lo"] = list_of_lo
+
+    # для посмотреть
+
+    dataset_cities_with_la_lo
+
+    # palettes for seaborn
+
+    main_palette_hex = ["#437C90", "#255957", "#EDAFB8", "#A98743", "#F7C548", "#E54B4B"]
+    main_palette = sns.color_palette(main_palette_hex)
+
+
+    # seaborn visualizations
+
 
     def count_inaugurated_in_decades(dataset):
         constructed = []
@@ -45,20 +115,29 @@ with st.echo(code_location='below'):
             constructed.append(number_constructed)
         return constructed
 
+
     def list_of_decades():
         decades = []
         for i in range(1, 18):
-            start_decade_year = 1850 + (i*10)
-            end_decade_year = 1850 + (i*10) + 10
+            start_decade_year = 1850 + (i * 10)
+            end_decade_year = 1850 + (i * 10) + 10
             element = str(start_decade_year) + " - " + str(end_decade_year)
             decades.append(element)
         return decades
 
+
+    # появление метро по странам
+
+    st.header("Metro inauguration by countries")
+
+    st.write("The following barplot shows when different countries inaugurated their first metro system."
+             "In most of countries that have metro systems they appeared in the second half of the 20th century.")
+
     decades_x = list_of_decades()
     constructed_by_decades_total = count_inaugurated_in_decades(dataset_total)
 
-    axes_constructed_total = {'decade':decades_x,'metro systems inaugurated':constructed_by_decades_total}
-    construction_data_total = pd.DataFrame(axes_constructed_total, columns=['decade','metro systems inaugurated'])
+    axes_constructed_total = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_total}
+    construction_data_total = pd.DataFrame(axes_constructed_total, columns=['decade', 'metro systems inaugurated'])
 
     fig_constructed_total = plt.figure(figsize=(14, 10))
 
@@ -71,8 +150,12 @@ with st.echo(code_location='below'):
         color='#000F08');
     st.pyplot(fig_constructed_total)
 
+    st.header("Metro inauguration by cities")
+
+    st.write("kk"
+             "It is visible that in Asia and Latin America metro systems were inaugurated later than in Europe.")
+
     def choose_region_inauguration():
-        st.header("how many countries opened metro in every decade in the particular region")
         sd = st.selectbox(
             "select a region",
             [
@@ -84,8 +167,6 @@ with st.echo(code_location='below'):
                 "north america"
             ]
         )
-
-        fig = plt.figure(figsize=(12, 6))
 
         if sd == "africa":
             constructed_by_decades_africa = count_inaugurated_in_decades(dataset_total_africa)
@@ -201,18 +282,76 @@ with st.echo(code_location='below'):
 
             st.pyplot(fig_constructed_na)
 
-        st.pyplot(fig)
 
     choose_region_inauguration()
-    
-    m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
 
-    # add marker for Liberty Bell
-tooltip = "Liberty Bell"
-folium.Marker(
-    [39.949610, -75.150282], popup="Liberty Bell", tooltip=tooltip
-).add_to(m)
+    #
 
-    # call to render Folium map in Streamlit
-folium_static(m)
+    st.header("How many metro systems were built, by decades")
 
+    st.write("The following histogram shows the number of metro systems built (by cities in contrast to by countries"
+             "in the previous graphs. The dominance of Asian cities in the past years metro construction is seen clearly.")
+
+    fig = plt.figure(figsize=(12, 6))
+    sns.histplot(data=dataset_cities, x="year", hue="region",
+                 fill=True, multiple="stack", palette=main_palette,
+                 alpha=1, linewidth=0)
+
+    st.pyplot(fig)
+
+    # folium
+
+    st.header("Metro size by length")
+
+    st.write("This bubble map allows to compare the length of metro systems around the world. The map is zoomable"
+             "and the bubbles are signed with a city name.")
+
+    length_map = folium.Map(location=[0, 0], tiles="OpenStreetMap", zoom_start=2)
+
+    ### FROM: https://www.python-graph-gallery.com/313-bubble-map-with-folium
+
+    for i in range(0, len(dataset_cities_with_la_lo)):
+        folium.CircleMarker(
+            location=[dataset_cities_with_la_lo.iloc[i]['la'], dataset_cities_with_la_lo.iloc[i]['lo']],
+            popup=dataset_cities_with_la_lo.iloc[i]['city'],
+            radius=float(dataset_cities_with_la_lo.iloc[i]['length_km']) / 100,
+            color='crimson',
+            fill=True,
+            fill_color='crimson'
+        ).add_to(length_map)
+
+    folium_static(length_map)
+
+    ### END FROM
+
+    st.header("Metro size by annual ridership")
+
+    st.write("Another way to compare the size of metro systems is their annual ridership. Apparently, the difference"
+             "in annual ridership is less than in the total length.")
+
+    ridership_map = folium.Map(location=[0, 0], tiles="OpenStreetMap", zoom_start=2)
+
+    ### FROM: https://www.python-graph-gallery.com/313-bubble-map-with-folium
+
+    for i in range(0, len(dataset_cities_with_la_lo)):
+        folium.CircleMarker(
+            location=[dataset_cities_with_la_lo.iloc[i]['la'], dataset_cities_with_la_lo.iloc[i]['lo']],
+            popup=dataset_cities_with_la_lo.iloc[i]['city'],
+            radius=float(dataset_cities_with_la_lo.iloc[i]['annual_ridership_mill']) / 100,
+            color='crimson',
+            fill=True,
+            fill_color='crimson'
+        ).add_to(ridership_map)
+
+    folium_static(ridership_map)
+
+    ### END FROM
+
+    def count_inaugurated_in_5years(dataset):
+        constructed = []
+        for i in range(1, 28):
+            end_year = 1890 + (i * 5)
+            df1 = dataset[dataset['year'].isin(range(0, end_year))]
+            number_constructed = len(df1.index)
+            constructed.append(number_constructed)
+        return constructed
