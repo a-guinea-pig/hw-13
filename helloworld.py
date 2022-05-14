@@ -22,8 +22,8 @@ with st.echo(code_location='below'):
         return pd.read_csv(dataset_link)
 
 
-    dataset_total = get_dataset("archive/metro_countries_total.csv")
-    dataset_cities = get_dataset("archive/metro_countries_cities.csv")
+    dataset_total = get_dataset("metro_countries_total.csv")
+    dataset_cities = get_dataset("metro_countries_cities.csv")
 
     dataset_total_africa = dataset_total.loc[dataset_total['region'] == 'africa']  # 437C90
     dataset_total_asia = dataset_total.loc[dataset_total['region'] == 'asia']  # 255957
