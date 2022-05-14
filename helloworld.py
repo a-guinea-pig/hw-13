@@ -13,6 +13,7 @@ from streamlit_folium import folium_static
 import folium
 ### END FROM
 
+st.set_page_config(layout="wide")
 
 with st.echo(code_location='below'):
     
@@ -34,8 +35,11 @@ with st.echo(code_location='below'):
 
     # для посмотреть
 
-    dataset_total
-    dataset_cities
+    agree = st.checkbox('Show datasets')
+
+    if agree:
+         dataset_total
+         dataset_cities    ;
 
     list_of_cities = dataset_cities['city'].tolist()
 
@@ -84,16 +88,11 @@ with st.echo(code_location='below'):
     for i in list_of_cities:
         list_of_lo.append(find_lon(i))
 
-    st.write(list_of_lo)
 
     dataset_cities_with_la_lo = dataset_cities.copy()
 
     dataset_cities_with_la_lo["la"] = list_of_la
     dataset_cities_with_la_lo["lo"] = list_of_lo
-
-    # для посмотреть
-
-    dataset_cities_with_la_lo
 
     # palettes for seaborn
 
@@ -127,164 +126,154 @@ with st.echo(code_location='below'):
 
     # появление метро по странам
 
-    st.header("Metro inauguration by countries")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.header("Metro inauguration by countries")
 
-    st.write("The following barplot shows when different countries inaugurated their first metro system."
-             "In most of countries that have metro systems they appeared in the second half of the 20th century.")
+        st.write("The following barplot shows when different countries inaugurated their first metro system."
+                 "In most of countries that have metro systems they appeared in the second half of the 20th century.")
 
-    decades_x = list_of_decades()
-    constructed_by_decades_total = count_inaugurated_in_decades(dataset_total)
+        decades_x = list_of_decades()
+        constructed_by_decades_total = count_inaugurated_in_decades(dataset_total)
 
-    axes_constructed_total = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_total}
-    construction_data_total = pd.DataFrame(axes_constructed_total, columns=['decade', 'metro systems inaugurated'])
+        axes_constructed_total = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_total}
+        construction_data_total = pd.DataFrame(axes_constructed_total, columns=['decade', 'metro systems inaugurated'])
 
-    fig_constructed_total = plt.figure(figsize=(14, 10))
+        fig_constructed_total = plt.figure(figsize=(14, 10))
 
-    sns.barplot(
-        y="decade",
-        x="metro systems inaugurated",
-        data=construction_data_total,
-        estimator=sum,
-        ci=None,
-        color='#000F08');
-    st.pyplot(fig_constructed_total)
+        sns.barplot(
+            y="decade",
+            x="metro systems inaugurated",
+            data=construction_data_total,
+            estimator=sum,
+            ci=None,
+            color='#000F08');
+        st.pyplot(fig_constructed_total)
 
-    st.header("Metro inauguration by cities")
+    with col2:
+        st.header("Metro inauguration by cities")
 
-    st.write("kk"
-             "It is visible that in Asia and Latin America metro systems were inaugurated later than in Europe.")
+        st.write("It is visible that in Asia and Latin America metro systems were inaugurated later than in Europe.")
 
-    def choose_region_inauguration():
-        sd = st.selectbox(
-            "select a region",
-            [
-                "africa",
-                "asia",
-                "australia",
-                "europe",
-                "latin america",
-                "north america"
-            ]
-        )
+        def choose_region_inauguration():
+            sd = st.selectbox( label = "select a region", options = [ "africa", "asia", "australia", "europe", "latin america", "north america"])
 
-        if sd == "africa":
-            constructed_by_decades_africa = count_inaugurated_in_decades(dataset_total_africa)
+            if sd == "africa":
+                constructed_by_decades_africa = count_inaugurated_in_decades(dataset_total_africa)
 
-            axes_constructed_africa = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_africa}
-            construction_data_total = pd.DataFrame(axes_constructed_africa, columns=['decade', 'metro systems inaugurated'])
+                axes_constructed_africa = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_africa}
+                construction_data_total = pd.DataFrame(axes_constructed_africa, columns=['decade', 'metro systems inaugurated'])
 
-            fig_constructed_africa = plt.figure(figsize=(14, 10))
-            ax = sns.barplot(
-                y="decade",
-                x="metro systems inaugurated",
-                data=construction_data_total,
-                estimator=sum,
-                ci=None,
-                color='#437C90');
+                fig_constructed_africa = plt.figure(figsize=(14, 10))
+                ax = sns.barplot(
+                    y="decade",
+                    x="metro systems inaugurated",
+                    data=construction_data_total,
+                    estimator=sum,
+                    ci=None,
+                    color='#437C90');
 
-            ax.set(xlim=(0, 6))
+                ax.set(xlim=(0, 6))
 
-            st.pyplot(fig_constructed_africa)
+                st.pyplot(fig_constructed_africa)
 
-        elif sd == "asia":
-            constructed_by_decades_asia = count_inaugurated_in_decades(dataset_total_asia)
+            elif sd == "asia":
+                constructed_by_decades_asia = count_inaugurated_in_decades(dataset_total_asia)
 
-            axes_constructed_asia = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_asia}
-            construction_data_total = pd.DataFrame(axes_constructed_asia, columns=['decade', 'metro systems inaugurated'])
+                axes_constructed_asia = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_asia}
+                construction_data_total = pd.DataFrame(axes_constructed_asia, columns=['decade', 'metro systems inaugurated'])
 
-            fig_constructed_asia = plt.figure(figsize=(14, 10))
-            ax = sns.barplot(
-                y="decade",
-                x="metro systems inaugurated",
-                data=construction_data_total,
-                estimator=sum,
-                ci=None,
-                color='#255957');
+                fig_constructed_asia = plt.figure(figsize=(14, 10))
+                ax = sns.barplot(
+                    y="decade",
+                    x="metro systems inaugurated",
+                    data=construction_data_total,
+                    estimator=sum,
+                    ci=None,
+                    color='#255957');
 
-            ax.set(xlim=(0, 6))
+                ax.set(xlim=(0, 6))
 
-            st.pyplot(fig_constructed_asia)
+                st.pyplot(fig_constructed_asia)
 
-        elif sd == "australia":
-            constructed_by_decades_aus = count_inaugurated_in_decades(dataset_total_australia)
+            elif sd == "australia":
+                constructed_by_decades_aus = count_inaugurated_in_decades(dataset_total_australia)
 
-            axes_constructed_aus = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_aus}
-            construction_data_total = pd.DataFrame(axes_constructed_aus, columns=['decade', 'metro systems inaugurated'])
+                axes_constructed_aus = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_aus}
+                construction_data_total = pd.DataFrame(axes_constructed_aus, columns=['decade', 'metro systems inaugurated'])
 
-            fig_constructed_aus = plt.figure(figsize=(14, 10))
-            ax = sns.barplot(
-                y="decade",
-                x="metro systems inaugurated",
-                data=construction_data_total,
-                estimator=sum,
-                ci=None,
-                color='#EDAFB8');
+                fig_constructed_aus = plt.figure(figsize=(14, 10))
+                ax = sns.barplot(
+                    y="decade",
+                    x="metro systems inaugurated",
+                    data=construction_data_total,
+                    estimator=sum,
+                    ci=None,
+                    color='#EDAFB8');
 
-            ax.set(xlim=(0, 6))
+                ax.set(xlim=(0, 6))
 
-            st.pyplot(fig_constructed_aus)
+                st.pyplot(fig_constructed_aus)
 
-        elif sd == "europe":
-            constructed_by_decades_eu = count_inaugurated_in_decades(dataset_total_europe)
+            elif sd == "europe":
+                constructed_by_decades_eu = count_inaugurated_in_decades(dataset_total_europe)
 
-            axes_constructed_eu = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_eu}
-            construction_data_total = pd.DataFrame(axes_constructed_eu, columns=['decade', 'metro systems inaugurated'])
+                axes_constructed_eu = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_eu}
+                construction_data_total = pd.DataFrame(axes_constructed_eu, columns=['decade', 'metro systems inaugurated'])
 
-            fig_constructed_eu = plt.figure(figsize=(14, 10))
-            ax = sns.barplot(
-                y="decade",
-                x="metro systems inaugurated",
-                data=construction_data_total,
-                estimator=sum,
-                ci=None,
-                color='#A98743');
+                fig_constructed_eu = plt.figure(figsize=(14, 10))
+                ax = sns.barplot(
+                    y="decade",
+                    x="metro systems inaugurated",
+                    data=construction_data_total,
+                    estimator=sum,
+                    ci=None,
+                    color='#A98743');
 
-            ax.set(xlim=(0, 6))
+                ax.set(xlim=(0, 6))
 
-            st.pyplot(fig_constructed_eu)
+                st.pyplot(fig_constructed_eu)
 
-        elif sd == "latin america":
-            constructed_by_decades_la = count_inaugurated_in_decades(dataset_total_latin_america)
+            elif sd == "latin america":
+                constructed_by_decades_la = count_inaugurated_in_decades(dataset_total_latin_america)
 
-            axes_constructed_la = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_la}
-            construction_data_total = pd.DataFrame(axes_constructed_la, columns=['decade', 'metro systems inaugurated'])
+                axes_constructed_la = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_la}
+                construction_data_total = pd.DataFrame(axes_constructed_la, columns=['decade', 'metro systems inaugurated'])
 
-            fig_constructed_la = plt.figure(figsize=(14, 10))
-            ax = sns.barplot(
-                y="decade",
-                x="metro systems inaugurated",
-                data=construction_data_total,
-                estimator=sum,
-                ci=None,
-                color='#F7C548');
+                fig_constructed_la = plt.figure(figsize=(14, 10))
+                ax = sns.barplot(
+                    y="decade",
+                    x="metro systems inaugurated",
+                    data=construction_data_total,
+                    estimator=sum,
+                    ci=None,
+                    color='#F7C548');
 
-            ax.set(xlim=(0, 6))
+                ax.set(xlim=(0, 6))
 
-            st.pyplot(fig_constructed_la)
+                st.pyplot(fig_constructed_la)
 
-        elif sd == "north america":
-            constructed_by_decades_na = count_inaugurated_in_decades(dataset_total_north_america)
+            elif sd == "north america":
+                constructed_by_decades_na = count_inaugurated_in_decades(dataset_total_north_america)
 
-            axes_constructed_na = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_na}
-            construction_data_total = pd.DataFrame(axes_constructed_na, columns=['decade', 'metro systems inaugurated'])
+                axes_constructed_na = {'decade': decades_x, 'metro systems inaugurated': constructed_by_decades_na}
+                construction_data_total = pd.DataFrame(axes_constructed_na, columns=['decade', 'metro systems inaugurated'])
 
-            fig_constructed_na = plt.figure(figsize=(14, 10))
-            ax = sns.barplot(
-                y="decade",
-                x="metro systems inaugurated",
-                data=construction_data_total,
-                estimator=sum,
-                ci=None,
-                color='#E54B4B');
+                fig_constructed_na = plt.figure(figsize=(14, 10))
+                ax = sns.barplot(
+                    y="decade",
+                    x="metro systems inaugurated",
+                    data=construction_data_total,
+                    estimator=sum,
+                    ci=None,
+                    color='#E54B4B');
 
-            ax.set(xlim=(0, 6))
+                ax.set(xlim=(0, 6))
 
-            st.pyplot(fig_constructed_na)
+                st.pyplot(fig_constructed_na)
 
 
-    choose_region_inauguration()
-
-    #
+        choose_region_inauguration()
 
     st.header("How many metro systems were built, by decades")
 
@@ -297,6 +286,65 @@ with st.echo(code_location='below'):
                  alpha=1, linewidth=0)
 
     st.pyplot(fig)
+
+    # celluloid
+
+    def count_inaugurated_in_5years(dataset):
+        constructed = []
+        for i in range(1, 28):
+            end_year = 1890 + (i * 5)
+            df1 = dataset[dataset['year'].isin(range(0, end_year))]
+            number_constructed = len(df1.index)
+            constructed.append(number_constructed)
+        return constructed
+
+    def list_of_5years():
+        years5 = []
+        for i in range(1, 28):
+            start_decade_year = 1885 + (i * 5)
+            end_decade_year = 1890 + (i * 5)
+            element = str(start_decade_year) + " - " + str(end_decade_year)
+            years5.append(element)
+        return years5
+
+    years5_x = list_of_5years()
+
+
+    df = pd.DataFrame({ "africa": count_inaugurated_in_5years(dataset_cities_africa),
+                       "asia": count_inaugurated_in_5years(dataset_cities_asia),
+                       "australia": count_inaugurated_in_5years(dataset_cities_australia),
+                       "europe": count_inaugurated_in_5years(dataset_cities_europe),
+                       "latin america": count_inaugurated_in_5years(dataset_cities_latin_america),
+                       "north america": count_inaugurated_in_5years(dataset_cities_north_america)},
+                      index = years5_x)
+
+    st.write("Let's take a closer look on the construstion of the Asian and European metro systems by 5-year intervals in the following animation.")
+
+    ### FROM: https://www.w3resource.com/graphics/matplotlib/basic/matplotlib-basic-exercise-5.php, https://gist.github.com/ischurov/fb00906c5704ebdd56ff13d7e02583e4
+
+    from celluloid import Camera
+    import streamlit.components.v1 as components
+
+    fig = plt.figure()
+    camera = Camera(fig)
+    for i in range(0, 28):
+        df = pd.DataFrame({"europe": count_inaugurated_in_5years(dataset_cities_europe)[:i],
+                           "asia": count_inaugurated_in_5years(dataset_cities_asia)[:i],},
+                          index=years5_x[:i])
+        x1 = df.index.values.tolist()
+        y1 = df["europe"]
+        x2 = df.index.values.tolist()
+        y2 = df["asia"]
+        plt.plot(x1, y1, label="europe")
+        plt.plot(x2, y2, label="asia")
+        plt.xticks([])
+        plt.show()
+        camera.snap()
+    animation = camera.animate()
+
+    components.html(animation.to_jshtml(), height=600)
+
+    ### END FROM
 
     # folium
 
@@ -345,12 +393,3 @@ with st.echo(code_location='below'):
     folium_static(ridership_map)
 
     ### END FROM
-
-    def count_inaugurated_in_5years(dataset):
-        constructed = []
-        for i in range(1, 28):
-            end_year = 1890 + (i * 5)
-            df1 = dataset[dataset['year'].isin(range(0, end_year))]
-            number_constructed = len(df1.index)
-            constructed.append(number_constructed)
-        return constructed
