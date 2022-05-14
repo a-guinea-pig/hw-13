@@ -282,18 +282,20 @@ with st.echo(code_location='below'):
 
 
         choose_region_inauguration()
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.header("How many metro systems were built, by decades")
 
-    st.header("How many metro systems were built, by decades")
+        st.write("The following histogram shows the number of metro systems built (by cities in contrast to by countries"
+                 "in the previous graphs. The dominance of Asian cities in the past years metro construction is seen clearly.")
 
-    st.write("The following histogram shows the number of metro systems built (by cities in contrast to by countries"
-             "in the previous graphs. The dominance of Asian cities in the past years metro construction is seen clearly.")
+        fig = plt.figure(figsize=(12, 6))
+        sns.histplot(data=dataset_cities, x="year", hue="region",
+                     fill=True, multiple="stack", palette=main_palette,
+                     alpha=1, linewidth=0)
 
-    fig = plt.figure(figsize=(12, 6))
-    sns.histplot(data=dataset_cities, x="year", hue="region",
-                 fill=True, multiple="stack", palette=main_palette,
-                 alpha=1, linewidth=0)
-
-    st.pyplot(fig)
+        st.pyplot(fig)
 
     # celluloid
 
@@ -325,40 +327,40 @@ with st.echo(code_location='below'):
                        "latin america": count_inaugurated_in_5years(dataset_cities_latin_america),
                        "north america": count_inaugurated_in_5years(dataset_cities_north_america)},
                       index = years5_x)
+    with col2:
+        st.write("Let's take a closer look on the construstion of the Asian and European metro systems by 5-year intervals in the following animation.")
 
-    st.write("Let's take a closer look on the construstion of the Asian and European metro systems by 5-year intervals in the following animation.")
+        ### FROM: https://www.w3resource.com/graphics/matplotlib/basic/matplotlib-basic-exercise-5.php, https://gist.github.com/ischurov/fb00906c5704ebdd56ff13d7e02583e4
 
-    ### FROM: https://www.w3resource.com/graphics/matplotlib/basic/matplotlib-basic-exercise-5.php, https://gist.github.com/ischurov/fb00906c5704ebdd56ff13d7e02583e4
+        from celluloid import Camera
+        import streamlit.components.v1 as components
 
-    from celluloid import Camera
-    import streamlit.components.v1 as components
+        fig = plt.figure()
+        camera = Camera(fig)
+        for i in range(0, 28):
+            df = pd.DataFrame({"europe": count_inaugurated_in_5years(dataset_cities_europe)[:i],
+                               "asia": count_inaugurated_in_5years(dataset_cities_asia)[:i],},
+                              index=years5_x[:i])
+            x1 = df.index.values.tolist()
+            y1 = df["europe"]
+            x2 = df.index.values.tolist()
+            y2 = df["asia"]
+            plt.plot(x1, y1, label="europe")
+            plt.plot(x2, y2, label="asia")
+            plt.xticks([])
+            plt.show()
+            camera.snap()
+        animation = camera.animate()
 
-    fig = plt.figure()
-    camera = Camera(fig)
-    for i in range(0, 28):
-        df = pd.DataFrame({"europe": count_inaugurated_in_5years(dataset_cities_europe)[:i],
-                           "asia": count_inaugurated_in_5years(dataset_cities_asia)[:i],},
-                          index=years5_x[:i])
-        x1 = df.index.values.tolist()
-        y1 = df["europe"]
-        x2 = df.index.values.tolist()
-        y2 = df["asia"]
-        plt.plot(x1, y1, label="europe")
-        plt.plot(x2, y2, label="asia")
-        plt.xticks([])
-        plt.show()
-        camera.snap()
-    animation = camera.animate()
+        components.html(animation.to_jshtml(), height=600)
 
-    components.html(animation.to_jshtml(), height=600)
-
-    ### END FROM
+        ### END FROM
 
     # folium
 
     st.header("Metro size by length")
 
-    st.write("This bubble map allows to compare the length of metro systems around the world. The map is zoomable"
+    st.write("This bubble map allows to compare the length of metro systems around the world. The map is zoomable "
              "and the bubbles are signed with a city name.")
 
     length_map = folium.Map(location=[0, 0], tiles="OpenStreetMap", zoom_start=2)
